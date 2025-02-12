@@ -1,6 +1,6 @@
 # metadesk_libgen
 
-Extra stuff for generating custom versions of metadesk for the user.
+Extra stuff for generating custom versions of [metadesk](https://github.com/Ed94/metadesk) for the user.
 
 ## Documentation
 
