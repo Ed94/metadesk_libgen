@@ -3,28 +3,12 @@
 #include "gen_common.h"
 
 #ifndef GENERATE_SEGREGATED
-#define GENERATE_SEGEREGATED 0
+#define GENERATE_SEGEREGATED 1
 #endif
 
 #ifndef GENERATE_SINGLEHEADER
-#define GENERATE_SINGLEHEADER 0
+#define GENERATE_SINGLEHEADER 1
 #endif
-
-#define path_refactor_script path_gen_c11 "c11.refactor"
-
-gen_Code refactor( gen_Code code ) {
-	return code_refactor_and_format(code, path_scratch_file, path_refactor_script, nullptr );
-}
-gen_Code refactor_and_format( gen_Code code ) {
-	return code_refactor_and_format(code, path_scratch_file, path_refactor_script, path_format_style );
-}
-gen_Code refactor_inplace(gen_Code code, char const* path) {
-	gen_Code refactored = code_refactor_and_format(code, path_scratch_file, path_refactor_script, nullptr );
-	gen_Builder builder = gen_builder_open(path);
-	gen_builder_print(& builder, refactored);
-	gen_builder_write(& builder);
-	return refactored;
-}
 
 int main()
 {
@@ -108,96 +92,37 @@ int main()
 
 	gen_Code os_win32_c = gen_scan_file(path_os_win32 "os_win32.c");
 	gen_Code os_linux_c = gen_scan_file(path_os_linux "os_linux.c");
-	gen_Code os_os_c    = gen_scan_file(path_os       "os.c");
+	gen_Code os_c       = gen_scan_file(path_os       "os.c");
 
 	gen_Code mdesk_c = gen_scan_file(path_mdesk "mdesk.c");
 
-#if 1
-	gen_Code r_tp_stb_sprintf_h = refactor_inplace(tp_stb_sprintf_h, path_md_third_party "stb/stb_sprintf.h");
-
-	gen_Code r_base_context_cracking_h = refactor_inplace(base_context_cracking_h, path_base "context_cracking.h");
-	gen_Code r_base_platform_h         = refactor_inplace(base_platform_h,         path_base "platform.h");
-	gen_Code r_base_linkage_h          = refactor_inplace(base_linkage_h,          path_base "linkage.h");
-	gen_Code r_base_macros_h           = refactor_inplace(base_macros_h,           path_base "macros.h");
-	gen_Code r_base_generic_macros_h   = refactor_inplace(base_generic_macros_h,   path_base "generic_macros.h");
-	gen_Code r_base_profiling_h        = refactor_inplace(base_profiling_h,        path_base "profiling.h");
-	gen_Code r_base_base_types_h       = refactor_inplace(base_base_types_h,       path_base "base_types.h");
-	gen_Code r_base_ring_h             = refactor_inplace(base_ring_h,             path_base "ring.h");
-	gen_Code r_base_debug_h            = refactor_inplace(base_debug_h,            path_base "debug.h");
-	gen_Code r_base_memory_h           = refactor_inplace(base_memory_h,           path_base "memory.h");
-	gen_Code r_base_memory_substrate_h = refactor_inplace(base_memory_substrate_h, path_base "memory_substrate.h");
-	gen_Code r_base_arena_h            = refactor_inplace(base_arena_h,            path_base "arena.h");
-	gen_Code r_base_space_h            = refactor_inplace(base_space_h,            path_base "space.h");
-	gen_Code r_base_math_h             = refactor_inplace(base_math_h,             path_base "math.h");
-	gen_Code r_base_sort_h             = refactor_inplace(base_sort_h,             path_base "sort.h");
-	gen_Code r_base_toolchain_h        = refactor_inplace(base_toolchain_h,        path_base "toolchain.h");
-	gen_Code r_base_time_h             = refactor_inplace(base_time_h,             path_base "time.h");
-	gen_Code r_base_strings_h          = refactor_inplace(base_strings_h,          path_base "strings.h");
-	gen_Code r_base_text_h             = refactor_inplace(base_text_h,             path_base "text.h");
-	gen_Code r_base_thread_context_h   = refactor_inplace(base_thread_context_h,   path_base "thread_context.h");
-	gen_Code r_base_command_line_h     = refactor_inplace(base_command_line_h,     path_base "command_line.h");
-	gen_Code r_base_markup_h           = refactor_inplace(base_markup_h,           path_base "markup.h");
-	gen_Code r_base_logger_h           = refactor_inplace(base_logger_h,           path_base "logger.h");
-	gen_Code r_base_entry_point_h      = refactor_inplace(base_entry_point_h,      path_base "entry_point.h");
-	gen_Code r_base_file_h             = refactor_inplace(base_file_h,             path_base "file.h");
-
-	gen_Code r_os_h                = refactor_inplace(os_h,                path_os       "os.h");
-	gen_Code r_os_win32_includes_h = refactor_inplace(os_win32_includes_h, path_os_win32 "os_win32_includes.h");
-	gen_Code r_os_win32_h          = refactor_inplace(os_win32_h,          path_os_win32 "os_win32.h");
-	gen_Code r_os_linux_includes_h = refactor_inplace(os_linux_includes_h, path_os_linux "os_linux_includes.h");
-	gen_Code r_os_linux_h          = refactor_inplace(os_linux_h,          path_os_linux "os_linux.h");
-
-	gen_Code r_mdesk_h = refactor_inplace(mdesk_h, path_mdesk "mdesk.h");
-
-	gen_Code r_base_platform_c         = refactor_inplace(base_platform_c,         path_base "platform.c");
-	gen_Code r_base_debug_c            = refactor_inplace(base_debug_c,            path_base "debug.c");
-	gen_Code r_base_memory_substrate_c = refactor_inplace(base_memory_substrate_c, path_base "memory_substrate.c");
-	gen_Code r_base_arena_c            = refactor_inplace(base_arena_c,            path_base "arena.c");
-	gen_Code r_base_strings_c          = refactor_inplace(base_strings_c,          path_base "strings.c");
-	gen_Code r_base_text_c             = refactor_inplace(base_text_c,             path_base "text.c");
-	gen_Code r_base_thread_context_c   = refactor_inplace(base_thread_context_c,   path_base "thread_context.c");
-	gen_Code r_base_markup_c           = refactor_inplace(base_markup_c,           path_base "markup.c");
-	gen_Code r_base_command_line_c     = refactor_inplace(base_command_line_c,     path_base "command_line.c");
-	gen_Code r_base_logger_c           = refactor_inplace(base_logger_c,           path_base "logger.c");
-	gen_Code r_base_entry_point_c      = refactor_inplace(base_entry_point_c,      path_base "entry_point.c");
-	gen_Code r_base_time_c             = refactor_inplace(base_time_c,             path_base "time.c");
-
-	gen_Code r_os_win32_c = refactor_inplace(os_win32_c, path_os_win32 "os_win32.c");
-	gen_Code r_os_linux_c = refactor_inplace(os_linux_c, path_os_linux "os_linux.c");
-	gen_Code r_os_c       = refactor_inplace(os_os_c,    path_os       "os.c");
-
-	gen_Code r_mdesk_c = refactor_inplace(mdesk_c, path_mdesk "mdesk.c");
-#endif
 #pragma region Refactored / Formatted
-#if 0
-	gen_Code r_tp_stb_sprintf_h = refactor(tp_stb_sprintf_h);
-
-	gen_CodeBody r_tp_stb_sprintf_h_parsed  = gen_parse_global_body(tp_stb_sprintf_h->Content);
-	gen_CodeBody r_tp_stb_sprintf_header    = gen_def_body(CT_Global_Body);
-	gen_CodeBody r_tp_stb_sprintf_source    = gen_def_body(CT_Global_Body);
+	gen_CodeBody tp_stb_sprintf_h_parsed  = gen_parse_global_body(tp_stb_sprintf_h->Content);
+	gen_CodeBody tp_stb_sprintf_header    = gen_def_body(CT_Global_Body);
+	gen_CodeBody tp_stb_sprintf_source    = gen_def_body(CT_Global_Body);
 
 	gen_b32 past_header = false;
 	gen_b32 past_source = false;
-	for (gen_Code stb_code = gen_iterator(CodeBody, r_tp_stb_sprintf_h_parsed, stb_code)) switch(stb_code->Type)
+	for (gen_Code stb_code = gen_iterator(CodeBody, tp_stb_sprintf_h_parsed, stb_code)) switch(stb_code->Type)
 	{
 		case CT_Preprocess_IfNotDef: 
 		{
 			gen_CodePreprocessCond cond_if = gen_cast(gen_CodePreprocessCond, stb_code);
 			if (gen_str_are_equal(cond_if->Content, lit("STB_SPRINTF_H_INCLUDE"))) 
 			{
-				gen_body_append(r_tp_stb_sprintf_header, cond_if);
+				gen_body_append(tp_stb_sprintf_header, cond_if);
 				
-				gen_Code header_code = gen_next_CodeBody(r_tp_stb_sprintf_h_parsed, stb_code);
+				gen_Code header_code = gen_next_CodeBody(tp_stb_sprintf_h_parsed, stb_code);
 				while (header_code->Type != CT_Comment || !gen_str_contains(header_code->Content, lit("STB_SPRINTF_H_INCLUDE"))) 
 				{
-					gen_body_append(r_tp_stb_sprintf_header, header_code);
-					header_code = gen_next_CodeBody(r_tp_stb_sprintf_h_parsed, header_code);
+					gen_body_append(tp_stb_sprintf_header, header_code);
+					header_code = gen_next_CodeBody(tp_stb_sprintf_h_parsed, header_code);
 				}
 				// should be: <// STB_SPRINTF_H_INCLUDE>
-				gen_body_append(r_tp_stb_sprintf_header, header_code);
+				gen_body_append(tp_stb_sprintf_header, header_code);
 				past_header = true;
 
-				stb_code = gen_next_CodeBody(r_tp_stb_sprintf_h_parsed, header_code);
+				stb_code = gen_next_CodeBody(tp_stb_sprintf_h_parsed, header_code);
 			}
 		}
 		break;
@@ -206,84 +131,30 @@ int main()
 			gen_CodePreprocessCond cond_if = gen_cast(gen_CodePreprocessCond, stb_code);
 			if (gen_str_are_equal(cond_if->Content, lit("STB_SPRINTF_IMPLEMENTATION"))) 
 			{
-				gen_body_append(r_tp_stb_sprintf_source, cond_if);
+				gen_body_append(tp_stb_sprintf_source, cond_if);
 				
-				gen_Code source_code = gen_next_CodeBody(r_tp_stb_sprintf_h_parsed, stb_code);
+				gen_Code source_code = gen_next_CodeBody(tp_stb_sprintf_h_parsed, stb_code);
 				while (source_code->Type != CT_Comment || !gen_str_contains(source_code->Content, lit("STB_SPRINTF_IMPLEMENTATION"))) 
 				{
-					gen_body_append(r_tp_stb_sprintf_source, source_code);
-					source_code = gen_next_CodeBody(r_tp_stb_sprintf_h_parsed, source_code);
+					gen_body_append(tp_stb_sprintf_source, source_code);
+					source_code = gen_next_CodeBody(tp_stb_sprintf_h_parsed, source_code);
 				}
 				// should be: <// STB_SPRINTF_IMPLEMENTATION>
-				gen_body_append(r_tp_stb_sprintf_source, source_code);
+				gen_body_append(tp_stb_sprintf_source, source_code);
 				past_source = true;
 
-				stb_code = gen_next_CodeBody(r_tp_stb_sprintf_h_parsed, source_code);
+				stb_code = gen_next_CodeBody(tp_stb_sprintf_h_parsed, source_code);
 			}
 		}
 		break;
 
 		default:
 			if ( ! past_header || past_source) {
-				gen_body_append(r_tp_stb_sprintf_header, stb_code);
+				gen_body_append(tp_stb_sprintf_header, stb_code);
 			}
-			gen_body_append(r_tp_stb_sprintf_source, stb_code);
+			gen_body_append(tp_stb_sprintf_source, stb_code);
 		break;
 	}
-
-	gen_Code r_base_context_cracking_h = refactor(base_context_cracking_h);
-	gen_Code r_base_platform_h         = refactor(base_platform_h);
-	gen_Code r_base_linkage_h          = refactor(base_linkage_h);
-	gen_Code r_base_macros_h           = refactor(base_macros_h);
-	gen_Code r_base_generic_macros_h   = refactor(base_generic_macros_h);
-	gen_Code r_base_profiling_h        = refactor(base_profiling_h);
-	gen_Code r_base_base_types_h       = refactor(base_base_types_h);
-	gen_Code r_base_ring_h             = refactor(base_ring_h);
-	gen_Code r_base_debug_h            = refactor(base_debug_h);
-	gen_Code r_base_memory_h           = refactor(base_memory_h);
-	gen_Code r_base_memory_substrate_h = refactor_and_format(base_memory_substrate_h);
-	gen_Code r_base_arena_h            = refactor(base_arena_h);
-	gen_Code r_base_space_h            = refactor_and_format(base_space_h);
-	gen_Code r_base_math_h             = refactor_and_format(base_math_h);
-	gen_Code r_base_sort_h             = refactor(base_sort_h);
-	gen_Code r_base_toolchain_h        = refactor(base_toolchain_h);
-	gen_Code r_base_time_h             = refactor(base_time_h);
-	gen_Code r_base_strings_h          = refactor_and_format(base_strings_h);
-	gen_Code r_base_text_h             = refactor(base_text_h);
-	gen_Code r_base_thread_context_h   = refactor(base_thread_context_h);
-	gen_Code r_base_command_line_h     = refactor(base_command_line_h);
-	gen_Code r_base_markup_h           = refactor(base_markup_h);
-	gen_Code r_base_logger_h           = refactor_and_format(base_logger_h);
-	gen_Code r_base_entry_point_h      = refactor(base_entry_point_h);
-	gen_Code r_base_file_h             = refactor(base_file_h);
-
-	gen_Code r_os_h                = refactor_and_format(os_h);
-	gen_Code r_os_win32_includes_h = refactor(os_win32_includes_h);
-	gen_Code r_os_win32_h          = refactor_and_format(os_win32_h);
-	gen_Code r_os_linux_includes_h = refactor(os_linux_includes_h);
-	gen_Code r_os_linux_h          = refactor_and_format(os_linux_h);
-
-	gen_Code r_mdesk_h = refactor_and_format(mdesk_h);
-
-	gen_Code r_base_platform_c         = refactor(base_platform_c);
-	gen_Code r_base_debug_c            = refactor(base_debug_c);
-	gen_Code r_base_memory_substrate_c = refactor(base_memory_substrate_c);
-	gen_Code r_base_arena_c            = refactor(base_arena_c);
-	gen_Code r_base_strings_c          = refactor(base_strings_c);
-	gen_Code r_base_text_c             = refactor(base_text_c);
-	gen_Code r_base_thread_context_c   = refactor(base_thread_context_c);
-	gen_Code r_base_markup_c           = refactor(base_markup_c);
-	gen_Code r_base_command_line_c     = refactor(base_command_line_c);
-	gen_Code r_base_logger_c           = refactor(base_logger_c);
-	gen_Code r_base_entry_point_c      = refactor(base_entry_point_c);
-	gen_Code r_base_time_c             = refactor(base_time_c);
-
-	gen_Code r_os_win32_c = refactor(os_win32_c);
-	gen_Code r_os_linux_c = refactor(os_linux_c);
-	gen_Code r_os_c       = refactor(os_os_c);
-
-	gen_Code r_mdesk_c = refactor_and_format(mdesk_c);
-#endif
 #pragma endregion Refactored / Formatted
 
 	#if GENERATE_SINGLEHEADER
@@ -318,12 +189,12 @@ int main()
 		print(banner_base);
 		new_line();
 
-		print_section(r_base_context_cracking_h, lit("Context Cracking"));
-		print_section(r_base_platform_h,         lit("platform"));
-		print_section(r_base_linkage_h,          lit("Linkage"));
-		print_section(r_base_macros_h,           lit("Macros"));
-		print_section(r_base_generic_macros_h,   lit("_Generic Macros"));
-		print_section(r_base_profiling_h,        lit("Profiling"));
+		print_section(base_context_cracking_h, lit("Context Cracking"));
+		print_section(base_platform_h,         lit("platform"));
+		print_section(base_linkage_h,          lit("Linkage"));
+		print_section(base_macros_h,           lit("Macros"));
+		print_section(base_generic_macros_h,   lit("_Generic Macros"));
+		print_section(base_profiling_h,        lit("Profiling"));
 
 		print_fmt("%S", implementation_guard_start);
 		new_line();
@@ -336,29 +207,29 @@ int main()
 		preprocess_endif();
 		new_line();
 
-		print_section(r_tp_stb_sprintf_header, lit("STB snprintf Header"));
+		print_section(tp_stb_sprintf_header, lit("STB snprintf Header"));
 		print_fmt("%S", implementation_guard_end);
 		new_line();
 
-		print_section(r_base_base_types_h,       lit("Types"));
-		print_section(r_base_ring_h,             lit("Ring"));
-		print_section(r_base_debug_h,            lit("Debug"));
-		print_section(r_base_memory_h,           lit("Memory"));
-		print_section(r_base_memory_substrate_h, lit("Memory Substrate"));
-		print_section(r_base_arena_h,            lit("Arena"));
-		print_section(r_base_space_h,            lit("Space"));
-		print_section(r_base_math_h,             lit("Math"));
-		print_section(r_base_sort_h,             lit("Sort"));
-		print_section(r_base_toolchain_h,        lit("Toolchain"));
-		print_section(r_base_time_h,             lit("Time"));
-		print_section(r_base_strings_h,          lit("strings"));
-		print_section(r_base_text_h,             lit("Text"));
-		print_section(r_base_thread_context_h,   lit("Thread Context"));
-		print_section(r_base_command_line_h,     lit("Command Line"));
-		print_section(r_base_markup_h,           lit("Markup"));
-		print_section(r_base_logger_h,           lit("Logger"));
-		print_section(r_base_entry_point_h,      lit("Entry Point"));
-		print_section(r_base_file_h,             lit("File"));
+		print_section(base_base_types_h,       lit("Types"));
+		print_section(base_ring_h,             lit("Ring"));
+		print_section(base_debug_h,            lit("Debug"));
+		print_section(base_memory_h,           lit("Memory"));
+		print_section(base_memory_substrate_h, lit("Memory Substrate"));
+		print_section(base_arena_h,            lit("Arena"));
+		print_section(base_space_h,            lit("Space"));
+		print_section(base_math_h,             lit("Math"));
+		print_section(base_sort_h,             lit("Sort"));
+		print_section(base_toolchain_h,        lit("Toolchain"));
+		print_section(base_time_h,             lit("Time"));
+		print_section(base_strings_h,          lit("strings"));
+		print_section(base_text_h,             lit("Text"));
+		print_section(base_thread_context_h,   lit("Thread Context"));
+		print_section(base_command_line_h,     lit("Command Line"));
+		print_section(base_markup_h,           lit("Markup"));
+		print_section(base_logger_h,           lit("Logger"));
+		print_section(base_entry_point_h,      lit("Entry Point"));
+		print_section(base_file_h,             lit("File"));
 
 		pragma_endregion("Base");
 		new_line();
@@ -367,7 +238,7 @@ int main()
 		print(banner_os);
 		new_line();
 
-		print_section(r_os_h, lit("OS"));
+		print_section(os_h, lit("OS"));
 		
 		preprocess_if("!defined(MD_OS_FEATURE_GRAPHICAL)"); {
 			define(lit("MD_OS_FEATURE_GRAPHICAL"), MT_Expression, .content = lit("0") );
@@ -382,13 +253,13 @@ int main()
 		new_line();
 
 		preprocess_if("MD_OS_WINDOWS"); {
-			print_section(r_os_win32_includes_h, lit("Win32 Includes"));
-			print_section(r_os_win32_h, lit("OS Win32"));
+			print_section(os_win32_includes_h, lit("Win32 Includes"));
+			print_section(os_win32_h, lit("OS Win32"));
 		}
 		comment("#if MD_OS_WINDOWS"); new_line();
 		preprocess_elif("MD_OS_LINUX"); {
-			print_section(r_os_linux_includes_h, lit("Linux Includes"));
-			print_section(r_os_linux_h, lit("OS Linux"));
+			print_section(os_linux_includes_h, lit("Linux Includes"));
+			print_section(os_linux_h, lit("OS Linux"));
 		}
 		comment("#elif OS_LINUX");
 		preprocess_endif();
@@ -400,7 +271,7 @@ int main()
 		print(banner_mdesk);
 		new_line();
 
-		print(r_mdesk_h);
+		print(mdesk_h);
 
 		pragma_endregion("MDesk")
 		new_line();
@@ -420,21 +291,21 @@ int main()
 		new_line();
 
 		define(lit("STB_SPRINTF_IMPLEMENTATION"), MT_Statement);
-		print_section(refactor_and_format(r_tp_stb_sprintf_source), lit("STB snprintf Source"));
+		print_section(tp_stb_sprintf_source, lit("STB snprintf Source"));
 		new_line();
 
-		print_section(r_base_platform_c,         lit("Platform"));
-		print_section(r_base_debug_c,            lit("Debug"));
-		print_section(r_base_memory_substrate_c, lit("Memory Substrate"));
-		print_section(r_base_arena_c,            lit("Arena"));
-		print_section(r_base_strings_c,          lit("Strings"));
-		print_section(r_base_text_c,             lit("Text"));
-		print_section(r_base_thread_context_c,   lit("Thread Context"));
-		print_section(r_base_markup_c,           lit("Markup"));
-		print_section(r_base_command_line_c,     lit("Command Line"));
-		print_section(r_base_logger_c,           lit("Logger"));
-		print_section(r_base_entry_point_c,      lit("Entry Point"));
-		print_section(r_base_time_c,             lit("Time"));
+		print_section(base_platform_c,         lit("Platform"));
+		print_section(base_debug_c,            lit("Debug"));
+		print_section(base_memory_substrate_c, lit("Memory Substrate"));
+		print_section(base_arena_c,            lit("Arena"));
+		print_section(base_strings_c,          lit("Strings"));
+		print_section(base_text_c,             lit("Text"));
+		print_section(base_thread_context_c,   lit("Thread Context"));
+		print_section(base_markup_c,           lit("Markup"));
+		print_section(base_command_line_c,     lit("Command Line"));
+		print_section(base_logger_c,           lit("Logger"));
+		print_section(base_entry_point_c,      lit("Entry Point"));
+		print_section(base_time_c,             lit("Time"));
 
 		pragma_endregion("Base");
 		new_line();
@@ -444,14 +315,14 @@ int main()
 		new_line();
 
 		preprocess_if("MD_OS_WINDOWS"); {
-			print(r_os_win32_c)
+			print(os_win32_c)
 		}
 		preprocess_elif("MD_OS_LINUX"); {
-			print(r_os_linux_c);
+			print(os_linux_c);
 		}
 		preprocess_endif();
 
-		print(r_os_c);;
+		print(os_c);;
 
 		pragma_endregion("Operating System");
 		new_line();
@@ -460,7 +331,7 @@ int main()
 		print(banner_mdesk);
 		new_line();
 
-		print(r_mdesk_c);
+		print(mdesk_c);
 
 		pragma_endregion("MDesk");
 		new_line();
@@ -491,12 +362,12 @@ int main()
 		print(banner_base);
 		new_line();
 
-		print_section(r_base_context_cracking_h, lit("Context Cracking"));
-		print_section(r_base_platform_h,         lit("platform"));
-		print_section(r_base_linkage_h,          lit("Linkage"));
-		print_section(r_base_macros_h,           lit("Macros"));
-		print_section(r_base_generic_macros_h,   lit("_Generic Macros"));
-		print_section(r_base_profiling_h,        lit("Profiling"));
+		print_section(base_context_cracking_h, lit("Context Cracking"));
+		print_section(base_platform_h,         lit("platform"));
+		print_section(base_linkage_h,          lit("Linkage"));
+		print_section(base_macros_h,           lit("Macros"));
+		print_section(base_generic_macros_h,   lit("_Generic Macros"));
+		print_section(base_profiling_h,        lit("Profiling"));
 
 		define(lit("STB_SPRINTF_DECORATE(name)"), MT_Expression, .content = lit("md_##name"), .flags = MF_Functional);
 		// print();
@@ -506,28 +377,28 @@ int main()
 		preprocess_endif();
 		new_line();
 
-		print_section(refactor_and_format(r_tp_stb_sprintf_header), lit("STB snprintf Header"));
+		print_section(tp_stb_sprintf_header, lit("STB snprintf Header"));
 		new_line();
 
-		print_section(r_base_base_types_h,       lit("Types"));
-		print_section(r_base_ring_h,             lit("Ring"));
-		print_section(r_base_debug_h,            lit("Debug"));
-		print_section(r_base_memory_h,           lit("Memory"));
-		print_section(r_base_memory_substrate_h, lit("Memory Substrate"));
-		print_section(r_base_arena_h,            lit("Arena"));
-		print_section(r_base_space_h,            lit("Space"));
-		print_section(r_base_math_h,             lit("Math"));
-		print_section(r_base_sort_h,             lit("Sort"));
-		print_section(r_base_toolchain_h,        lit("Toolchain"));
-		print_section(r_base_time_h,             lit("Time"));
-		print_section(r_base_strings_h,          lit("strings"));
-		print_section(r_base_text_h,             lit("Text"));
-		print_section(r_base_thread_context_h,   lit("Thread Context"));
-		print_section(r_base_command_line_h,     lit("Command Line"));
-		print_section(r_base_markup_h,           lit("Markup"));
-		print_section(r_base_logger_h,           lit("Logger"));
-		print_section(r_base_entry_point_h,      lit("Entry Point"));
-		print_section(r_base_file_h,             lit("File"));
+		print_section(base_base_types_h,       lit("Types"));
+		print_section(base_ring_h,             lit("Ring"));
+		print_section(base_debug_h,            lit("Debug"));
+		print_section(base_memory_h,           lit("Memory"));
+		print_section(base_memory_substrate_h, lit("Memory Substrate"));
+		print_section(base_arena_h,            lit("Arena"));
+		print_section(base_space_h,            lit("Space"));
+		print_section(base_math_h,             lit("Math"));
+		print_section(base_sort_h,             lit("Sort"));
+		print_section(base_toolchain_h,        lit("Toolchain"));
+		print_section(base_time_h,             lit("Time"));
+		print_section(base_strings_h,          lit("strings"));
+		print_section(base_text_h,             lit("Text"));
+		print_section(base_thread_context_h,   lit("Thread Context"));
+		print_section(base_command_line_h,     lit("Command Line"));
+		print_section(base_markup_h,           lit("Markup"));
+		print_section(base_logger_h,           lit("Logger"));
+		print_section(base_entry_point_h,      lit("Entry Point"));
+		print_section(base_file_h,             lit("File"));
 
 		pragma_endregion("Base");
 		new_line();
@@ -536,7 +407,7 @@ int main()
 		print(banner_os);
 		new_line();
 
-		print_section(r_os_h, lit("OS"));
+		print_section(os_h, lit("OS"));
 		
 		preprocess_if("!defined(MD_OS_FEATURE_GRAPHICAL)"); {
 			define(lit("MD_OS_FEATURE_GRAPHICAL"), MT_Expression, .content = lit("0") );
@@ -551,13 +422,13 @@ int main()
 		new_line();
 
 		preprocess_if("MD_OS_WINDOWS"); {
-			print_section(r_os_win32_includes_h, lit("Win32 Includes"));
-			print_section(r_os_win32_h, lit("OS Win32"));
+			print_section(os_win32_includes_h, lit("Win32 Includes"));
+			print_section(os_win32_h, lit("OS Win32"));
 		}
 		comment("#if MD_OS_WINDOWS"); new_line();
 		preprocess_elif("MD_OS_LINUX"); {
-			print_section(r_os_linux_includes_h, lit("Linux Includes"));
-			print_section(r_os_linux_h, lit("OS Linux"));
+			print_section(os_linux_includes_h, lit("Linux Includes"));
+			print_section(os_linux_h, lit("OS Linux"));
 		}
 		comment("#elif OS_LINUX");
 		preprocess_endif();
@@ -577,7 +448,7 @@ int main()
 
 		include(lit("metadesk_deps.h"));
 
-		print(r_mdesk_h);
+		print(mdesk_h);
 		new_line();
 		gen_builder_write(header);
 	#undef builder
@@ -604,21 +475,21 @@ int main()
 		new_line();
 
 		define(lit("STB_SPRINTF_IMPLEMENTATION"), MT_Statement);
-		print_section(refactor_and_format(r_tp_stb_sprintf_source), lit("STB snprintf Source"));
+		print_section(tp_stb_sprintf_source, lit("STB snprintf Source"));
 		new_line();
 
-		print_section(r_base_platform_c,         lit("Platform"));
-		print_section(r_base_debug_c,            lit("Debug"));
-		print_section(r_base_memory_substrate_c, lit("Memory Substrate"));
-		print_section(r_base_arena_c,            lit("Arena"));
-		print_section(r_base_strings_c,          lit("Strings"));
-		print_section(r_base_text_c,             lit("Text"));
-		print_section(r_base_thread_context_c,   lit("Thread Context"));
-		print_section(r_base_markup_c,           lit("Markup"));
-		print_section(r_base_command_line_c,     lit("Command Line"));
-		print_section(r_base_logger_c,           lit("Logger"));
-		print_section(r_base_entry_point_c,      lit("Entry Point"));
-		print_section(r_base_time_c,             lit("Time"));
+		print_section(base_platform_c,         lit("Platform"));
+		print_section(base_debug_c,            lit("Debug"));
+		print_section(base_memory_substrate_c, lit("Memory Substrate"));
+		print_section(base_arena_c,            lit("Arena"));
+		print_section(base_strings_c,          lit("Strings"));
+		print_section(base_text_c,             lit("Text"));
+		print_section(base_thread_context_c,   lit("Thread Context"));
+		print_section(base_markup_c,           lit("Markup"));
+		print_section(base_command_line_c,     lit("Command Line"));
+		print_section(base_logger_c,           lit("Logger"));
+		print_section(base_entry_point_c,      lit("Entry Point"));
+		print_section(base_time_c,             lit("Time"));
 
 		pragma_endregion("Base");
 		new_line();
@@ -628,14 +499,14 @@ int main()
 		new_line();
 
 		preprocess_if("MD_OS_WINDOWS"); {
-			print(r_os_win32_c)
+			print(os_win32_c)
 		}
 		preprocess_elif("MD_OS_LINUX"); {
-			print(r_os_linux_c);
+			print(os_linux_c);
 		}
 		preprocess_endif();
 
-		print(r_os_c);;
+		print(os_c);;
 
 		pragma_endregion("Operating System");
 		new_line();
@@ -648,7 +519,7 @@ int main()
 
 		include(lit("metadesk.h"));
 
-		print(r_mdesk_c);
+		print(mdesk_c);
 
 		new_line();
 		gen_builder_write(source);

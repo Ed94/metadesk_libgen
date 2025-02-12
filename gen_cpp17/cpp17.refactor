@@ -17,6 +17,8 @@
 
 // base/context_cracking.h
 
+//TODO(Ed): This needs to be reverse mapping for cpp, metadesk now has the prefixes by default.
+
 namespace BUILD_, MD_BUILD_
 
 namespace ARCH_,     MD_ARCH_
