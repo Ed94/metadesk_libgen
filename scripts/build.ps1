@@ -8,7 +8,7 @@ $misc = join-path $PSScriptRoot 'helpers/misc.ps1'
 $path_root = Get-ScriptRepoRoot
 Push-Location $path_root
 
-$path_bin         = join-path $path_root bin
+$path_bin         = join-path $path_root scripts
 $path_scripts     = $path_bin
 
 $devshell           = Join-Path $PSScriptRoot 'helpers/devshell.ps1'

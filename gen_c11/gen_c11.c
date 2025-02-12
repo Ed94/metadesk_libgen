@@ -3,11 +3,11 @@
 #include "gen_common.h"
 
 #ifndef GENERATE_SEGREGATED
-#define GENERATE_SEGEREGATED 1
+#define GENERATE_SEGEREGATED 0
 #endif
 
 #ifndef GENERATE_SINGLEHEADER
-#define GENERATE_SINGLEHEADER 1
+#define GENERATE_SINGLEHEADER 0
 #endif
 
 #define path_refactor_script path_gen_c11 "c11.refactor"
@@ -17,6 +17,13 @@ gen_Code refactor( gen_Code code ) {
 }
 gen_Code refactor_and_format( gen_Code code ) {
 	return code_refactor_and_format(code, path_scratch_file, path_refactor_script, path_format_style );
+}
+gen_Code refactor_inplace(gen_Code code, char const* path) {
+	gen_Code refactored = code_refactor_and_format(code, path_scratch_file, path_refactor_script, nullptr );
+	gen_Builder builder = gen_builder_open(path);
+	gen_builder_print(& builder, refactored);
+	gen_builder_write(& builder);
+	return refactored;
 }
 
 int main()
@@ -50,7 +57,7 @@ int main()
 	gen_Code banner_mdesk   = gen_scan_file(path_gen_c11 "banner_mdesk.h");
 	gen_Code banner_md_impl = gen_scan_file(path_gen_c11 "banner_md_impl.h");
 
-	gen_Code tp_stb_sprintf_h = gen_scan_file(path_third_party "stb/stb_sprintf.h");
+	gen_Code tp_stb_sprintf_h = gen_scan_file(path_md_third_party "stb/stb_sprintf.h");
 
 	gen_Code base_context_cracking_h = gen_scan_file(path_base "context_cracking.h");
 	gen_Code base_platform_h         = gen_scan_file(path_base "platform.h");
@@ -105,7 +112,64 @@ int main()
 
 	gen_Code mdesk_c = gen_scan_file(path_mdesk "mdesk.c");
 
+#if 1
+	gen_Code r_tp_stb_sprintf_h = refactor_inplace(tp_stb_sprintf_h, path_md_third_party "stb/stb_sprintf.h");
+
+	gen_Code r_base_context_cracking_h = refactor_inplace(base_context_cracking_h, path_base "context_cracking.h");
+	gen_Code r_base_platform_h         = refactor_inplace(base_platform_h,         path_base "platform.h");
+	gen_Code r_base_linkage_h          = refactor_inplace(base_linkage_h,          path_base "linkage.h");
+	gen_Code r_base_macros_h           = refactor_inplace(base_macros_h,           path_base "macros.h");
+	gen_Code r_base_generic_macros_h   = refactor_inplace(base_generic_macros_h,   path_base "generic_macros.h");
+	gen_Code r_base_profiling_h        = refactor_inplace(base_profiling_h,        path_base "profiling.h");
+	gen_Code r_base_base_types_h       = refactor_inplace(base_base_types_h,       path_base "base_types.h");
+	gen_Code r_base_ring_h             = refactor_inplace(base_ring_h,             path_base "ring.h");
+	gen_Code r_base_debug_h            = refactor_inplace(base_debug_h,            path_base "debug.h");
+	gen_Code r_base_memory_h           = refactor_inplace(base_memory_h,           path_base "memory.h");
+	gen_Code r_base_memory_substrate_h = refactor_inplace(base_memory_substrate_h, path_base "memory_substrate.h");
+	gen_Code r_base_arena_h            = refactor_inplace(base_arena_h,            path_base "arena.h");
+	gen_Code r_base_space_h            = refactor_inplace(base_space_h,            path_base "space.h");
+	gen_Code r_base_math_h             = refactor_inplace(base_math_h,             path_base "math.h");
+	gen_Code r_base_sort_h             = refactor_inplace(base_sort_h,             path_base "sort.h");
+	gen_Code r_base_toolchain_h        = refactor_inplace(base_toolchain_h,        path_base "toolchain.h");
+	gen_Code r_base_time_h             = refactor_inplace(base_time_h,             path_base "time.h");
+	gen_Code r_base_strings_h          = refactor_inplace(base_strings_h,          path_base "strings.h");
+	gen_Code r_base_text_h             = refactor_inplace(base_text_h,             path_base "text.h");
+	gen_Code r_base_thread_context_h   = refactor_inplace(base_thread_context_h,   path_base "thread_context.h");
+	gen_Code r_base_command_line_h     = refactor_inplace(base_command_line_h,     path_base "command_line.h");
+	gen_Code r_base_markup_h           = refactor_inplace(base_markup_h,           path_base "markup.h");
+	gen_Code r_base_logger_h           = refactor_inplace(base_logger_h,           path_base "logger.h");
+	gen_Code r_base_entry_point_h      = refactor_inplace(base_entry_point_h,      path_base "entry_point.h");
+	gen_Code r_base_file_h             = refactor_inplace(base_file_h,             path_base "file.h");
+
+	gen_Code r_os_h                = refactor_inplace(os_h,                path_os       "os.h");
+	gen_Code r_os_win32_includes_h = refactor_inplace(os_win32_includes_h, path_os_win32 "os_win32_includes.h");
+	gen_Code r_os_win32_h          = refactor_inplace(os_win32_h,          path_os_win32 "os_win32.h");
+	gen_Code r_os_linux_includes_h = refactor_inplace(os_linux_includes_h, path_os_linux "os_linux_includes.h");
+	gen_Code r_os_linux_h          = refactor_inplace(os_linux_h,          path_os_linux "os_linux.h");
+
+	gen_Code r_mdesk_h = refactor_inplace(mdesk_h, path_mdesk "mdesk.h");
+
+	gen_Code r_base_platform_c         = refactor_inplace(base_platform_c,         path_base "platform.c");
+	gen_Code r_base_debug_c            = refactor_inplace(base_debug_c,            path_base "debug.c");
+	gen_Code r_base_memory_substrate_c = refactor_inplace(base_memory_substrate_c, path_base "memory_substrate.c");
+	gen_Code r_base_arena_c            = refactor_inplace(base_arena_c,            path_base "arena.c");
+	gen_Code r_base_strings_c          = refactor_inplace(base_strings_c,          path_base "strings.c");
+	gen_Code r_base_text_c             = refactor_inplace(base_text_c,             path_base "text.c");
+	gen_Code r_base_thread_context_c   = refactor_inplace(base_thread_context_c,   path_base "thread_context.c");
+	gen_Code r_base_markup_c           = refactor_inplace(base_markup_c,           path_base "markup.c");
+	gen_Code r_base_command_line_c     = refactor_inplace(base_command_line_c,     path_base "command_line.c");
+	gen_Code r_base_logger_c           = refactor_inplace(base_logger_c,           path_base "logger.c");
+	gen_Code r_base_entry_point_c      = refactor_inplace(base_entry_point_c,      path_base "entry_point.c");
+	gen_Code r_base_time_c             = refactor_inplace(base_time_c,             path_base "time.c");
+
+	gen_Code r_os_win32_c = refactor_inplace(os_win32_c, path_os_win32 "os_win32.c");
+	gen_Code r_os_linux_c = refactor_inplace(os_linux_c, path_os_linux "os_linux.c");
+	gen_Code r_os_c       = refactor_inplace(os_os_c,    path_os       "os.c");
+
+	gen_Code r_mdesk_c = refactor_inplace(mdesk_c, path_mdesk "mdesk.c");
+#endif
 #pragma region Refactored / Formatted
+#if 0
 	gen_Code r_tp_stb_sprintf_h = refactor(tp_stb_sprintf_h);
 
 	gen_CodeBody r_tp_stb_sprintf_h_parsed  = gen_parse_global_body(tp_stb_sprintf_h->Content);
@@ -219,10 +283,10 @@ int main()
 	gen_Code r_os_c       = refactor(os_os_c);
 
 	gen_Code r_mdesk_c = refactor_and_format(mdesk_c);
-
+#endif
 #pragma endregion Refactored / Formatted
 
-	if (GENERATE_SINGLEHEADER)
+	#if GENERATE_SINGLEHEADER
 	{
 	#define builder  header
 		gen_Builder  header_ = gen_builder_open(path_gen "metadesk_singleheader.h");
@@ -407,8 +471,9 @@ int main()
 		gen_builder_write(header);
 	#undef builder
 	}
+	#endif
 
-	if (GENERATE_SEGEREGATED)
+	#if (GENERATE_SEGEREGATED)
 	{
 		// Dependencies
 
@@ -589,6 +654,7 @@ int main()
 		gen_builder_write(source);
 	#undef builder
 	}
+	#endif
 
 	// gen_deinit(& ctx);
 	return 0;
