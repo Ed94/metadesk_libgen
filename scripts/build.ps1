@@ -1,5 +1,3 @@
-# TODO(Ed): Need to eventually utilize the original build scripts
-# For now just using something I'm used to for getting the library working..
 clear-host
 
 $misc = join-path $PSScriptRoot 'helpers/misc.ps1'
@@ -296,7 +294,5 @@ if ($expression_tests)
 {
 
 }
-
-
 
 Pop-Location # $path_root
