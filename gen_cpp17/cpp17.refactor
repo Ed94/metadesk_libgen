@@ -538,7 +538,7 @@ word Arena,       MD_Arena
 word TempArena,   MD_TempArena
 
 namespace arena_,     md_arena_
-namespace push_array, md_push_array_
+namespace push_array, md_push_array
 
 word extract_arena, md_extract_arena
 

@@ -6,8 +6,7 @@ $misc = join-path $PSScriptRoot 'helpers/misc.ps1'
 $path_root = Get-ScriptRepoRoot
 Push-Location $path_root
 
-$path_bin         = join-path $path_root scripts
-$path_scripts     = $path_bin
+$path_scripts = join-path $path_root scripts
 
 $devshell           = Join-Path $PSScriptRoot 'helpers/devshell.ps1'
 $incremental_checks = Join-Path $PSScriptRoot 'helpers/incremental_checks.ps1'
@@ -102,13 +101,15 @@ if ( $cannot_build ) {
 
 write-host "Build Type: $(if ($release) {"Release"} else {"Debug"} )"
 
-$path_build       = join-path $path_root build
-$path_code        = join-path $path_root code
-$path_examples    = join-path $path_root examples
-$path_gen_c11     = join-path $path_root gen_c11
-$path_gen_cpp17   = join-path $path_root gen_cpp17
-$path_tests       = join-path $path_root tests
-$path_third_party = join-path $path_root third_party
+$path_build          = join-path $path_root     build
+$path_code           = join-path $path_root     code
+$path_examples       = join-path $path_root     examples
+$path_gen_c11        = join-path $path_root     gen_c11
+$path_gen_cpp17      = join-path $path_root     gen_cpp17
+$path_metadesk       = join-path $path_root     metadesk
+$path_tests          = join-path $path_metadesk tests
+$path_third_party    = join-path $path_root     third_party
+$path_md_third_party = join-path $path_metadesk third_party
 
 verify-path $path_build
 

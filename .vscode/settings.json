@@ -22,6 +22,11 @@
 	"files.associations": {
 		"*.rmd": "markdown",
 		"cstddef": "cpp",
-		"xmemory": "cpp"
+		"xmemory": "cpp",
+		"mdesk.h": "c",
+		"os.h": "c",
+		"initializer_list": "c",
+		"utility": "c",
+		"xutility": "c"
 	}
 }
